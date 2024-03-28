@@ -3,7 +3,7 @@ package views
 import "todo/models"
 import "strconv"
 
-templ Todo (todoItems []models.TodoItem) {
+templ Todo (todoItems []models.TodoItem, todoListUid int) {
   @Header("Your Todo App") {
     <h1 class="justify-center">
       <p>Your Todo List</p>
@@ -12,7 +12,7 @@ templ Todo (todoItems []models.TodoItem) {
         <button
           type="button"
           class="btn btn-primary"
-          hx-get="/new/todo"
+          hx-get={ "/new/todo/" + toString(todoListUid) }
         >
         Add New Task
         </button>
@@ -22,8 +22,17 @@ templ Todo (todoItems []models.TodoItem) {
         for i, item := range(todoItems) {
           <div>
             <tr>
+              <td>
+              <input
+              hx-put={ "/todo/check/complete/" + toString(item.Uid) }
+              hx-swap="innerHTML"
+              type="checkbox"
+              if item.IsMarked {
+                checked
+              }
+              /></td>
               <td>{ strconv.Itoa(i+1) + ". " + item.Title }</td>
-              <td hx-post={ "/todo/delete/" + strconv.Itoa(item.Uid) } hx-swap=" ignoreTitle:true" hx-target="closest tr">X</td>
+              <td hx-post={ "/todo/delete/" + toString(item.Uid) } hx-swap=" ignoreTitle:true" hx-target="closest tr">X</td>
             </tr>
           </div>
         }
@@ -32,12 +41,21 @@ templ Todo (todoItems []models.TodoItem) {
   }
 }
 
-templ NewTodo() {
-  <form hx-put="/add/todo" hx-target="this" hx-swap="outerHTML">
+templ NewTodo(todoListUid int) {
+  <form
+    class="justify-center"
+    hx-put={ "/add/todo/" + toString(todoListUid) }
+    hx-target="this"
+    hx-swap="outerHTML"
+  >
     <div>
       <label>Add New Task</label>
       <input type="text" name="title" value="title"/>
     </div>
-    <button class="btn">Submit</button>
+    <button class="btn btn-primary">Submit</button>
   </form>
+}
+
+func toString(n int) string {
+  return strconv.Itoa(n)
 }

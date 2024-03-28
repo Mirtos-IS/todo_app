@@ -7,23 +7,25 @@ import (
 type TodoItem struct {
     Uid int
     Title string
+    IsMarked bool
+    TodoListUid sql.NullInt64
 }
 
-func GetItems() ([]TodoItem, error) {
+func GetItems(todoListUid int) ([]TodoItem, error) {
     db, err := sql.Open("sqlite3", "database/todoApp.db")
     if err != nil {
         panic(err)
     }
     defer db.Close()
 
-    rows, _ := db.Query("SELECT * FROM todo_items")
+    rows, _ := db.Query("SELECT * FROM todo_items WHERE todo_list_uid = (?) ORDER BY uid DESC", todoListUid)
     defer rows.Close()
 
     var items []TodoItem
 
     for rows.Next() {
         var item TodoItem
-        err = rows.Scan(&item.Uid, &item.Title)
+        err = rows.Scan(&item.Uid, &item.Title, &item.TodoListUid, &item.IsMarked)
         if err != nil {
             panic(err)
         }
@@ -32,14 +34,14 @@ func GetItems() ([]TodoItem, error) {
     return items, nil
 }
 
-func SaveItem(title string) (bool, error) {
+func SaveItem(title string, todoListUid int) (bool, error) {
     db, err := sql.Open("sqlite3", "database/todoApp.db")
     if err != nil {
         panic(err)
     }
     defer db.Close()
 
-    _, err = db.Exec("INSERT INTO todo_items(title) VALUES(?)", title)
+    _, err = db.Exec("INSERT INTO todo_items(title, todo_list_uid) VALUES(?, ?)", title, todoListUid)
     if err != nil {
         panic(err)
     }
@@ -54,6 +56,21 @@ func DeleteItem(uid int) (bool, error) {
     defer db.Close()
 
     _, err = db.Exec("DELETE FROM todo_items WHERE uid=(?)", uid)
+    if err != nil {
+        panic(err)
+    }
+
+    return true, nil
+}
+
+func MarkAsComplete(uid int) (bool, error) {
+    db, err := sql.Open("sqlite3", "database/todoApp.db")
+    if err != nil {
+        panic(err)
+    }
+    defer db.Close()
+
+    _, err = db.Exec("UPDATE todo_items SET is_marked = NOT is_marked WHERE uid = (?)", uid)
     if err != nil {
         panic(err)
     }

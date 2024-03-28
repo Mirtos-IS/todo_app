@@ -1,0 +1,40 @@
+package views
+
+import "todo/models"
+
+templ TodoList(todoLists []models.TodoList) {
+  @Header("All Your Todo Lists") {
+    <h1>Your Todo Lists</h1>
+      <div class="justify-center" hx-target="this" hx-swap="outerHTML">
+        <button
+          type="button"
+          class="btn btn-primary"
+          hx-get="/list/add"
+        >
+        Add New List
+        </button>
+      </div>
+    <table class="justify-center">
+      for _, list := range(todoLists) {
+        <tr>
+          <p><a href={ templ.URL("/todo/" + toString(list.Uid)) }> { list.Name }</a></p>
+        </tr>
+      }
+    </table>
+  }
+}
+
+templ NewTodoList() {
+  <form
+    class="justify-center"
+    hx-put="/list/create"
+    hx-target="this"
+    hx-swap="outerHTML"
+  >
+    <div>
+      <label>Add New List</label>
+      <input type="text" name="name" value="Name"/>
+    </div>
+    <button class="btn btn-primary">Submit</button>
+  </form>
+}
