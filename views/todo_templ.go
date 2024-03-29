@@ -32,7 +32,7 @@ func Todo(todoItems []models.TodoItem, todoListUid int) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"justify-center\"><p>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"justify-center display-3\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -41,7 +41,7 @@ func Todo(todoItems []models.TodoItem, todoListUid int) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></h1><div class=\"justify-center\" hx-target=\"this\" hx-swap=\"outerHTML\"><button type=\"button\" class=\"btn btn-primary\" hx-get=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div class=\"justify-center\" hx-target=\"this\" hx-swap=\"outerHTML\"><button type=\"button\" class=\"btn btn-primary\" hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -58,20 +58,20 @@ func Todo(todoItems []models.TodoItem, todoListUid int) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><div class=\"justify-center d-flex\"><table>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><div class=\"justify-center d-flex\"><ul class=\"list-group list-group-flush\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			for i, item := range todoItems {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><tr><td><input hx-put=\"")
+			for _, item := range todoItems {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"list-group-item list-group-item-dark force-dark-color\"><input hx-put=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("/todo/check/complete/" + toString(item.Uid)))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("/todo/check/toggle/" + toString(item.Uid)))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"innerHTML\" type=\"checkbox\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"innerHTML\" type=\"checkbox\" class=\"form-check-input\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -81,20 +81,20 @@ func Todo(todoItems []models.TodoItem, todoListUid int) templ.Component {
 						return templ_7745c5c3_Err
 					}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("></td><td>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("> <span>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var5 string
-				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(i+1) + ". " + item.Title)
+				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/todo.templ`, Line: 33, Col: 57}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/todo.templ`, Line: 32, Col: 32}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td hx-post=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> <span hx-post=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -111,12 +111,12 @@ func Todo(todoItems []models.TodoItem, todoListUid int) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td></tr></div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></li>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</table></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

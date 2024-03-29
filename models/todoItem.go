@@ -63,7 +63,7 @@ func DeleteItem(uid int) (bool, error) {
     return true, nil
 }
 
-func MarkAsComplete(uid int) (bool, error) {
+func ToggleComplete(uid int) (bool, error) {
     db, err := sql.Open("sqlite3", "database/todoApp.db")
     if err != nil {
         panic(err)

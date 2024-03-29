@@ -1,6 +1,7 @@
 * {
   color: #CCCCCC;
   background-color: #505050;
+  font-size: 3vh;
   }
 
 .td {
@@ -17,3 +18,6 @@
   justify-content: center;
 }
 
+.force-dark-color {
+  background-color: #505050 !important;
+}

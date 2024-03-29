@@ -5,8 +5,8 @@ import "strconv"
 
 templ Todo (todoItems []models.TodoItem, todoListUid int) {
   @Header("Your Todo App") {
-    <h1 class="justify-center">
-      <p>Your Todo List</p>
+    <h1 class="justify-center display-3">
+      Your Todo List
     </h1>
       <div class="justify-center" hx-target="this" hx-swap="outerHTML">
         <button
@@ -18,25 +18,23 @@ templ Todo (todoItems []models.TodoItem, todoListUid int) {
         </button>
       </div>
     <div class="justify-center d-flex">
-      <table>
-        for i, item := range(todoItems) {
-          <div>
-            <tr>
-              <td>
+      <ul class="list-group list-group-flush">
+        for _, item := range(todoItems) {
+            <li class="list-group-item list-group-item-dark force-dark-color">
               <input
-              hx-put={ "/todo/check/complete/" + toString(item.Uid) }
+              hx-put={ "/todo/check/toggle/" + toString(item.Uid) }
               hx-swap="innerHTML"
               type="checkbox"
+              class="form-check-input"
               if item.IsMarked {
                 checked
               }
-              /></td>
-              <td>{ strconv.Itoa(i+1) + ". " + item.Title }</td>
-              <td hx-post={ "/todo/delete/" + toString(item.Uid) } hx-swap=" ignoreTitle:true" hx-target="closest tr">X</td>
-            </tr>
-          </div>
+              ></input>
+              <span>{ item.Title }</span>
+              <span hx-post={ "/todo/delete/" + toString(item.Uid) } hx-swap=" ignoreTitle:true" hx-target="closest tr">X</span>
+            </li>
         }
-      </table>
+      </ul>
     </div>
   }
 }

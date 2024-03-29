@@ -12,6 +12,8 @@ import "bytes"
 
 import "todo/models"
 
+// create a list that shows how many different task there are in each list,
+// too example, see https://getbootstrap.com/docs/5.1/components/list-group/
 func TodoList(todoLists []models.TodoList) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -70,7 +72,7 @@ func TodoList(todoLists []models.TodoList) templ.Component {
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(list.Name)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/todoList.templ`, Line: 19, Col: 78}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/todoList.templ`, Line: 21, Col: 78}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
