@@ -5,13 +5,13 @@ import "strconv"
 
 templ Todo (todoItems []models.TodoItem, todoListUid int) {
   @Header("Your Todo App") {
-    <h1 class="justify-center display-3">
+    <h1 class="justify-center display-3 mb-0 sm-b-border">
       Your Todo List
     </h1>
-      <div class="justify-center" hx-target="this" hx-swap="outerHTML">
+      <div class="justify-center no-border-color" hx-target="this" hx-swap="outerHTML">
         <button
           type="button"
-          class="btn btn-primary"
+          class="btn btn-primary btn-sm"
           hx-get={ "/new/todo/" + toString(todoListUid) }
         >
         Add New Task
@@ -22,13 +22,13 @@ templ Todo (todoItems []models.TodoItem, todoListUid int) {
         for _, item := range(todoItems) {
             <li class="list-group-item list-group-item-dark force-dark-color">
               <input
-              hx-put={ "/todo/check/toggle/" + toString(item.Uid) }
-              hx-swap="innerHTML"
-              type="checkbox"
-              class="form-check-input"
-              if item.IsMarked {
-                checked
-              }
+                hx-put={ "/todo/check/toggle/" + toString(item.Uid) }
+                hx-swap="innerHTML"
+                type="checkbox"
+                class="form-check-input"
+                if item.IsMarked {
+                  checked
+                }
               ></input>
               <span>{ item.Title }</span>
               <span hx-post={ "/todo/delete/" + toString(item.Uid) } hx-swap=" ignoreTitle:true" hx-target="closest tr">X</span>

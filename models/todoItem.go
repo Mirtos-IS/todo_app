@@ -34,6 +34,7 @@ func GetItems(todoListUid int) ([]TodoItem, error) {
     return items, nil
 }
 
+
 func SaveItem(title string, todoListUid int) (bool, error) {
     db, err := sql.Open("sqlite3", "database/todoApp.db")
     if err != nil {

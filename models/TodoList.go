@@ -8,6 +8,7 @@ type TodoList struct {
     Uid int
     Name string
     User_uid sql.NullInt64
+    Count int
 }
 
 func GetLists() ([]TodoList, error){
@@ -17,14 +18,20 @@ func GetLists() ([]TodoList, error){
     }
     defer db.Close()
 
-    rows, _ := db.Query("SELECT * FROM todo_lists ORDER BY uid DESC")
+    rows, _ := db.Query(
+        `SELECT todo_lists.*, COUNT(todo_items.uid)
+        FROM todo_lists
+            INNER JOIN todo_items
+            ON todo_lists.uid = todo_items.todo_list_uid
+        GROUP BY todo_lists.uid
+        ORDER BY uid DESC`)
     defer rows.Close()
 
     var lists []TodoList
 
     for rows.Next() {
         var list TodoList
-        err = rows.Scan(&list.Uid, &list.Name, &list.User_uid)
+        err = rows.Scan(&list.Uid, &list.Name, &list.User_uid, &list.Count)
         if err != nil {
             panic(err)
         }

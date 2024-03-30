@@ -21,3 +21,17 @@
 .force-dark-color {
   background-color: #505050 !important;
 }
+
+.no-border-color {
+  border-top: 5px solid #505050 !important;
+  margin-top: 5px solid #505050 !important;
+  padding-top: 5px solid #505050 !important;
+}
+
+.sm-b-border{
+  border-bottom: 1px solid #CCCCCC !important;
+}
+
+h1 {
+  color: #CCCCCC !important;
+}

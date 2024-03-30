@@ -32,7 +32,7 @@ func Todo(todoItems []models.TodoItem, todoListUid int) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"justify-center display-3\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"justify-center display-3 mb-0 sm-b-border\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -41,7 +41,7 @@ func Todo(todoItems []models.TodoItem, todoListUid int) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div class=\"justify-center\" hx-target=\"this\" hx-swap=\"outerHTML\"><button type=\"button\" class=\"btn btn-primary\" hx-get=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div class=\"justify-center no-border-color\" hx-target=\"this\" hx-swap=\"outerHTML\"><button type=\"button\" class=\"btn btn-primary btn-sm\" hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

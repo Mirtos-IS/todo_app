@@ -6,8 +6,8 @@ import "todo/models"
 //too example, see https://getbootstrap.com/docs/5.1/components/list-group/
 templ TodoList(todoLists []models.TodoList) {
   @Header("All Your Todo Lists") {
-    <h1>Your Todo Lists</h1>
-      <div class="justify-center" hx-target="this" hx-swap="outerHTML">
+    <h1 class="justify-center display-3 mb-0 sm-b-border">Your Todo Lists</h1>
+      <div class="justify-center no-border-color" hx-target="this" hx-swap="outerHTML">
         <button
           type="button"
           class="btn btn-primary"
@@ -16,13 +16,18 @@ templ TodoList(todoLists []models.TodoList) {
         Add New List
         </button>
       </div>
-    <table class="justify-center">
-      for _, list := range(todoLists) {
-        <tr>
-          <p><a href={ templ.URL("/todo/" + toString(list.Uid)) }> { list.Name }</a></p>
-        </tr>
-      }
-    </table>
+      <div class="justify-center">
+        <ul class="list-group list-group-flush">
+          for _, list := range(todoLists) {
+            <li class="list-group-item list-group-item-dark force-dark-color d-flex justify-content-between align-items-center">
+              <a class="no-click" href={ templ.URL("/todo/" + toString(list.Uid)) }>
+                { list.Name }
+                <span class="badge badge-pill badge-primary">{ toString(list.Count) }</span>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
   }
 }
 
