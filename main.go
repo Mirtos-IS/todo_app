@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"regexp"
 	"strconv"
+	"todo/login"
 	"todo/models"
 	"todo/views"
 
@@ -21,6 +22,26 @@ func getUidFromUrl(r *http.Request, url string) int {
         panic(err)
     }
     return Uid
+}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+    views.Login().Render(r.Context(), w)
+}
+
+func loginCheckHandler(w http.ResponseWriter, r *http.Request) {
+    username := r.FormValue("username")
+    password := r.FormValue("password")
+    uid, err := models.UserUidIfExist(username, password)
+    if err != nil {
+        panic(err)
+    }
+
+    if uid > 0 {
+        login.SetSession(uid, w)
+        http.Redirect(w, r, "/list", http.StatusFound)
+        return
+    }
+    http.Redirect(w, r, "/login/", http.StatusFound)
 }
 
 func todoHandler(w http.ResponseWriter, r *http.Request) {
@@ -55,8 +76,13 @@ func todoCheckCompleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func listHandler(w http.ResponseWriter, r *http.Request) {
-    todoLists, _ := models.GetLists()
-    views.TodoList(todoLists).Render(r.Context(), w)
+    uid := login.GetUserId(r)
+    if uid > 0 {
+        todoLists, _ := models.GetLists(uid)
+        views.TodoList(todoLists).Render(r.Context(), w)
+        return
+    }
+    http.Redirect(w, r, "/login/", http.StatusFound)
 }
 
 func listAddHandler(w http.ResponseWriter, r *http.Request) {
@@ -65,12 +91,16 @@ func listAddHandler(w http.ResponseWriter, r *http.Request) {
 
 func listCreateHandler(w http.ResponseWriter, r *http.Request) {
     name := r.FormValue("name")
+    uid := login.GetUserId(r)
 
     w.Header().Set("HX-Refresh", "true")
-    models.CreateList(name)
+    models.CreateList(name, uid)
 }
 
 func main() {
+    //login Routes
+    http.HandleFunc("/login/", loginHandler)
+    http.HandleFunc("/login/check", loginCheckHandler)
     //All Todo Lists Routes
     http.HandleFunc("/list/", listHandler)
     http.HandleFunc("/list/add", listAddHandler)

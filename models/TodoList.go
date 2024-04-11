@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"todo/database"
 )
 
 type TodoList struct {
@@ -11,8 +12,8 @@ type TodoList struct {
     Count int
 }
 
-func GetLists() ([]TodoList, error){
-    db, err := sql.Open("sqlite3", "database/todoApp.db")
+func GetLists(uid int) ([]TodoList, error){
+    db, err := database.OpenDB()
     if err != nil {
         panic(err)
     }
@@ -21,10 +22,11 @@ func GetLists() ([]TodoList, error){
     rows, _ := db.Query(
         `SELECT todo_lists.*, COUNT(todo_items.uid)
         FROM todo_lists
-            INNER JOIN todo_items
+            FULL OUTER JOIN todo_items
             ON todo_lists.uid = todo_items.todo_list_uid
+        WHERE user_uid = (?)
         GROUP BY todo_lists.uid
-        ORDER BY uid DESC`)
+        ORDER BY uid DESC`, uid)
     defer rows.Close()
 
     var lists []TodoList
@@ -40,14 +42,14 @@ func GetLists() ([]TodoList, error){
     return lists, nil
 }
 
-func CreateList(title string) (bool, error) {
-    db, err := sql.Open("sqlite3", "database/todoApp.db")
+func CreateList(title string, uid int) (bool, error) {
+    db, err := database.OpenDB()
     if err != nil {
         panic(err)
     }
     defer db.Close()
 
-    _, err = db.Exec("INSERT INTO todo_lists(name) VALUES(?)", title)
+    _, err = db.Exec("INSERT INTO todo_lists(name, user_uid) VALUES(?, ?)", title, uid)
     if err != nil {
         panic(err)
     }

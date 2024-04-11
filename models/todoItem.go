@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"todo/database"
 )
 
 type TodoItem struct {
@@ -12,7 +13,7 @@ type TodoItem struct {
 }
 
 func GetItems(todoListUid int) ([]TodoItem, error) {
-    db, err := sql.Open("sqlite3", "database/todoApp.db")
+    db, err := database.OpenDB()
     if err != nil {
         panic(err)
     }
@@ -36,7 +37,7 @@ func GetItems(todoListUid int) ([]TodoItem, error) {
 
 
 func SaveItem(title string, todoListUid int) (bool, error) {
-    db, err := sql.Open("sqlite3", "database/todoApp.db")
+    db, err := database.OpenDB()
     if err != nil {
         panic(err)
     }
@@ -50,7 +51,7 @@ func SaveItem(title string, todoListUid int) (bool, error) {
 }
 
 func DeleteItem(uid int) (bool, error) {
-    db, err := sql.Open("sqlite3", "database/todoApp.db")
+    db, err := database.OpenDB()
     if err != nil {
         panic(err)
     }
@@ -65,7 +66,7 @@ func DeleteItem(uid int) (bool, error) {
 }
 
 func ToggleComplete(uid int) (bool, error) {
-    db, err := sql.Open("sqlite3", "database/todoApp.db")
+    db, err := database.OpenDB()
     if err != nil {
         panic(err)
     }

@@ -1,0 +1,24 @@
+package views
+
+templ Login () {
+  @Header("Login") {
+    <h1 class="justify-center display-3 mb-0 sm-b-border">
+      Login
+    </h1>
+    <form action="POST" hx-put="/login/check">
+      <div>
+        <label>Name</label>
+        <input type="name" name="username"></input>
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" name="password"></input>
+      </div>
+    <button class="btn btn-primary">Submit</button>
+    </form>
+  }
+}
+
+templ createUserForm() {
+
+}

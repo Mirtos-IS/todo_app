@@ -2,9 +2,6 @@ CREATE TABLE `users` (
     `uid` INTEGER PRIMARY KEY AUTOINCREMENT,
     `username` VARCHAR(64) NULL,
     `password` VARCHAR(64) NULL,
-    `business_name` VARCHAR(64) DEFAULT '',
-    `created_at` DATE NULL,
-    `updated_at` DATE NULL
 );
 
 CREATE TABLE `todo_items` (
@@ -23,3 +20,9 @@ CREATE TABLE `todo_lists` (
 );
 
 INSERT INTO `todo_lists`(`name`) VALUES('Test')
+
+ALTER TABLE `users` DROP COLUMN `created_at`
+ALTER TABLE `users` DROP COLUMN `updated_at`
+ALTER TABLE `todo_lists` ADD COLUMN `user_uid`
+
+UPDATE `todo_lists` SET user_uid = 1 WHERE user_uid = NULL
