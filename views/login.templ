@@ -14,11 +14,27 @@ templ Login () {
         <label>Password</label>
         <input type="password" name="password"></input>
       </div>
-    <button class="btn btn-primary">Submit</button>
+      <button class="btn btn-primary">Submit</button>
+      <a class="btn btn-primary" href="/register/">Sign up</a>
     </form>
   }
 }
 
-templ createUserForm() {
-
+templ Register() {
+  @Header("Create a new account") {
+      <h1 class="justify-center display-3 mb-0 sm-b-border">
+        Create a new account
+      </h1>
+    <form action="POST" hx-put="/register/create">
+      <div>
+        <label>Name</label>
+        <input type="name" name="username"></input>
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" name="password"></input>
+      </div>
+      <button class="btn btn-primary">Submit</button>
+    </form>
+  }
 }

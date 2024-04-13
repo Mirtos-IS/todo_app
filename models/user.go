@@ -11,23 +11,29 @@ type User struct {
     password string
 }
 
-func createUser(username, password string) (*User, error) {
+func CreateUser(username, password string) (int, error) {
     db, err := database.OpenDB()
     if err != nil {
-        return nil, err
+        return 0, err
     }
 
     defer db.Close()
 
-    rows, err := db.Query("INSERT INTO users(username, password) Values(?,?)", username, password)
+    stmt, err := db.Prepare("INSERT INTO users(username, password) Values(?,?)")
     if err != nil {
-        return nil, err
+        return 0, err
     }
-    var user *User
-    for rows.Next() {
-        rows.Scan(user.Uid, user.Username, user.password)
+    res, err := stmt.Exec(username, hashPassword(password))
+    if err != nil {
+        return 0, err
     }
-    return user, nil
+
+    id, err := res.LastInsertId()
+    if err != nil {
+        return 0, err
+    }
+
+    return int(id), nil
 }
 
 func UserUidIfExist(username, password string) (int, error) {
@@ -44,9 +50,9 @@ func UserUidIfExist(username, password string) (int, error) {
 
     defer rows.Close()
 
-    var user *User
+    var user User
     for rows.Next() {
-        rows.Scan(user.Uid)
+        rows.Scan(&user.Uid)
         return user.Uid, nil
     }
 

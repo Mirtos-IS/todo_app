@@ -28,6 +28,28 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
     views.Login().Render(r.Context(), w)
 }
 
+func registerHandler(w http.ResponseWriter, r *http.Request) {
+    views.Register().Render(r.Context(), w)
+}
+
+func registerCreateHandler(w http.ResponseWriter, r *http.Request) {
+    username := r.FormValue("username")
+    password := r.FormValue("password")
+
+    uid, err := models.CreateUser(username, password)
+    if err != nil {
+        w.WriteHeader(http.StatusServiceUnavailable)
+        w.Write([]byte("Something went wrong"))
+        w.Header().Set("HX-Refresh", "true")
+        return
+    }
+
+    login.SetSession(uid, w)
+
+    w.Header().Set("HX-Refresh", "true")
+    http.Redirect(w, r, "/list", http.StatusSeeOther)
+}
+
 func loginCheckHandler(w http.ResponseWriter, r *http.Request) {
     username := r.FormValue("username")
     password := r.FormValue("password")
@@ -100,6 +122,8 @@ func listCreateHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
     //login Routes
     http.HandleFunc("/login/", loginHandler)
+    http.HandleFunc("/register/", registerHandler)
+    http.HandleFunc("/register/create", registerCreateHandler)
     http.HandleFunc("/login/check", loginCheckHandler)
     //All Todo Lists Routes
     http.HandleFunc("/list/", listHandler)
