@@ -1,0 +1,32 @@
+package views
+
+templ Chat() {
+  @Header("Chat") {
+    <div
+      hx-ext="ws"
+      ws-connect="/chat/get-messages"
+      hx-target="#replaceMe"
+      hx-swap="outerHTML"
+    >
+      <form id="form" ws-send>
+        <input name="chat_message"></input>
+      </form>
+      <table>
+        <tr id="replaceMe"
+          >
+        </tr>
+      </table>
+    </div>
+  }
+}
+
+templ ChatRow(msg string) {
+  <div>
+    <label> { msg } </label>
+      <tr id="replaceMe"
+          hx-target="#replaceMe"
+          hx-swap="outerHTML"
+        >
+      </tr>
+  </div>
+}

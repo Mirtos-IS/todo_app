@@ -1,0 +1,24 @@
+package views
+
+templ GameOfLife() {
+  @Header("Game Of Life") {
+    <div hx-get="/game-of-life/grid" hx-trigger="every 1s">
+    </div>
+  }
+}
+
+templ Grid(board [][]bool) {
+  <table style="background:white">
+    for _, line := range board {
+      <tr style="background:white">
+      for _, life := range line {
+        if life {
+          <td style="background:green"></td>
+        } else {
+          <td style="background:red"></td>
+        }
+      }
+      </tr>
+    }
+  </table>
+}

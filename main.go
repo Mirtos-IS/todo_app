@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"regexp"
 	"strconv"
+	"todo/chat"
+	"todo/gameOfLife"
 	"todo/login"
 	"todo/models"
 	"todo/views"
@@ -22,6 +24,15 @@ func getUidFromUrl(r *http.Request, url string) int {
         panic(err)
     }
     return Uid
+}
+
+func gameOfLifeHandler(w http.ResponseWriter, r *http.Request) {
+    views.GameOfLife().Render(r.Context(), w)
+}
+
+func gameOfLifeGridHandler(w http.ResponseWriter, r *http.Request) {
+    board := gameOfLife.NextBoardState()
+    views.Grid(board).Render(r.Context(), w)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -119,6 +130,10 @@ func listCreateHandler(w http.ResponseWriter, r *http.Request) {
     models.CreateList(name, uid)
 }
 
+func ChatHandler(w http.ResponseWriter, r *http.Request) {
+    views.Chat().Render(r.Context(), w)
+}
+
 func main() {
     //login Routes
     http.HandleFunc("/login/", loginHandler)
@@ -129,6 +144,9 @@ func main() {
     http.HandleFunc("/list/", listHandler)
     http.HandleFunc("/list/add", listAddHandler)
     http.HandleFunc("/list/create", listCreateHandler)
+    //easter egg
+    http.HandleFunc("/game-of-life/", gameOfLifeHandler)
+    http.HandleFunc("/game-of-life/grid", gameOfLifeGridHandler)
     //Single Todo List Routes
     http.HandleFunc("/todo/", todoHandler)
     http.HandleFunc("/new/todo/", todoNewHandler)
@@ -137,5 +155,11 @@ func main() {
     http.HandleFunc("/todo/check/toggle/", todoCheckCompleteHandler)
     http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("views/css"))))
 
+    //chat
+    http.HandleFunc("/chat", ChatHandler)
+    chat.StartServer()
+
     log.Fatal(http.ListenAndServe(":8080", nil))
+    //chat server
+    log.Fatal(http.ListenAndServe(":3000", nil))
 }
