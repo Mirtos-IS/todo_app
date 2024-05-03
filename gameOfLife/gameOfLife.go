@@ -9,10 +9,10 @@ func createBoard() [][]bool {
     }
 
     board[1][2] = true
-    board[2][2] = true
-    board[4][2] = true
-    board[4][4] = true
-    board[4][3] = true
+    board[2][3] = true
+    board[3][1] = true
+    board[3][2] = true
+    board[3][3] = true
 
     return board
 }
@@ -25,6 +25,10 @@ func checkNeighbor(x, y int) bool {
         }
         for j := y-1; j <= y+1; j++ {
             if j < 0 || j > 99 {
+                continue
+            }
+
+            if i == x && j == y {
                 continue
             }
 
